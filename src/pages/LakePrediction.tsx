@@ -4,14 +4,13 @@ import { supabase } from "@/lib/supabase";
 import { type Session } from '@supabase/supabase-js';
 import axios from 'axios';
 import GaugeComponent from "react-gauge-component";
-import {Droplets} from 'lucide-react';
+
 
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -99,7 +98,7 @@ const formatLakeName = (slug: string) => {
 
 export default function LakePrediction(){
     const { lakeName } = useParams();
-    
+    const safeLakeName = lakeName as keyof typeof lakesData;
     //input states
     const[inputs,setInputs] = useState({
         precip:'', evap: '', airTemp: '',
@@ -114,7 +113,7 @@ export default function LakePrediction(){
 
     if(!lakeName) return <Navigate to="/" />;
 
-    const handlePredict = async (e: React.SubmitEvent) => {
+    const handlePredict = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
@@ -181,9 +180,9 @@ export default function LakePrediction(){
     return(
         <div className="p-4 md:p-8 max-w-6xl space-y-6">
             <div className="flex flex-col items-center text-center space-y-4 max-w-3xl mx-auto mb-12">
-                <h1 className="text-3xl font-bold tracking-tight">{formatLakeName(lakeName)} Prediction</h1>
+                <h1 className="text-3xl font-bold tracking-tight">{formatLakeName(safeLakeName)} Prediction</h1>
                 <p className="text-md text-mute-foreground">
-                    {lakesData[lakeName].lake_desc}
+                    {lakesData[safeLakeName].lake_desc}
                 </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -194,17 +193,17 @@ export default function LakePrediction(){
                                 <div className="w-full max-w-[300px]">
                                     <GaugeComponent
                                         type="radial"
-                                        value={prediction ? prediction : lakesData[lakeName].baseline}
+                                        value={prediction ? prediction : lakesData[safeLakeName].baseline}
                                         // 1. Explicitly set your mathematical boundaries
-                                        minValue={lakesData[lakeName].min}
-                                        maxValue={lakesData[lakeName].max}
+                                        minValue={lakesData[safeLakeName].min}
+                                        maxValue={lakesData[safeLakeName].max}
                                         arc={{
                                             gradient: true,
                                             width: 0.15,
                                             padding: 0,
                                             subArcs: [
-                                            { limit: lakesData[lakeName].baseline -(lakesData[lakeName].baseline * .75), color: '#00bcd4' }, 
-                                            { limit: lakesData[lakeName].baseline + (lakesData[lakeName].baseline * 1.75), color: '#2196f3' }, 
+                                            { limit: lakesData[safeLakeName].baseline -(lakesData[safeLakeName].baseline * .75), color: '#00bcd4' }, 
+                                            { limit: lakesData[safeLakeName].baseline + (lakesData[safeLakeName].baseline * 1.75), color: '#2196f3' }, 
                                             { color: '#3f51b5' } 
                                             ]
                                         }}
@@ -220,10 +219,10 @@ export default function LakePrediction(){
                                             tickLabels: {
                                             type: "outer",
                                             ticks: [
-                                                { value: lakesData[lakeName].min },
+                                                { value: lakesData[safeLakeName].min },
                                                 { value: 0 },
-                                                { value: lakesData[lakeName].baseline},
-                                                { value: lakesData[lakeName].max }
+                                                { value: lakesData[safeLakeName].baseline},
+                                                { value: lakesData[safeLakeName].max }
                                             ],
                                             defaultTickValueConfig: { 
                                                 style: { fontSize: "9px", fill: "#aaa" } 
@@ -266,7 +265,7 @@ export default function LakePrediction(){
                                             required 
                                             value={inputs.precip} 
                                             onChange={handleInputChange} 
-                                            placeholder={lakesData[lakeName].defaults["precip"]}
+                                            placeholder={lakesData[safeLakeName].defaults["precip"].toString()}
                                             />
                                         </div>
                                     </div>
@@ -280,7 +279,7 @@ export default function LakePrediction(){
                                             required 
                                             value={inputs.evap}
                                             onChange={handleInputChange} 
-                                            placeholder={lakesData[lakeName].defaults["evap"]}
+                                            placeholder={lakesData[safeLakeName].defaults["evap"].toString()}
                                         />
                                         </div>
                                     </div>
@@ -294,7 +293,7 @@ export default function LakePrediction(){
                                             required 
                                             value={inputs.airTemp} 
                                             onChange={handleInputChange} 
-                                            placeholder={lakesData[lakeName].defaults["airtemp"]}
+                                            placeholder={lakesData[safeLakeName].defaults["airtemp"].toString()}
                                            />
                                         </div>
                                     </div>
@@ -313,7 +312,7 @@ export default function LakePrediction(){
                                             required 
                                             value={inputs.landPrecip} 
                                             onChange={handleInputChange} 
-                                            placeholder={lakesData[lakeName].defaults["land_precip"]} 
+                                            placeholder={lakesData[safeLakeName].defaults["land_precip"].toString()} 
                                            
                                              />
                                         </div>
@@ -328,7 +327,7 @@ export default function LakePrediction(){
                                             required 
                                             value={inputs.landEvap} 
                                             onChange={handleInputChange} 
-                                            placeholder={lakesData[lakeName].defaults["land_evap"]} 
+                                            placeholder={lakesData[safeLakeName].defaults["land_evap"].toString()} 
                                             />
                                         </div>
                                     </div>
@@ -341,7 +340,7 @@ export default function LakePrediction(){
                                             required 
                                             value={inputs.landAirTemp} 
                                             onChange={handleInputChange} 
-                                            placeholder={lakesData[lakeName].defaults["land_airtemp"]} 
+                                            placeholder={lakesData[safeLakeName].defaults["land_airtemp"].toString()} 
                                             />
                                         </div>
                                     </div>

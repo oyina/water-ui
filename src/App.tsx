@@ -1,5 +1,4 @@
-import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
-import{ Droplets, Menu } from 'lucide-react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import SignUp from './pages/Signup';
 import Home from './pages/Home';
@@ -8,8 +7,8 @@ import { useState, useEffect } from 'react';
 import { type Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { NavBar } from "@/components/navigation";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import {MobileSideBar} from '@/components/mobile-sidebar';
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { MobileSideBar } from '@/components/mobile-sidebar';
 import axios from 'axios';
 // const Home = () => (
 //   <div className="p-8">
@@ -35,46 +34,46 @@ import axios from 'axios';
 
 
 
-const Layout = ({children,session}: {children:React.ReactNode, session:any}) => (
+const Layout = ({ children, session }: { children: React.ReactNode, session: any }) => (
   <SidebarProvider defaultOpen={false}>
-  <MobileSideBar session={session}/>
-  <div className="w-full min-h-screen bg-background font-sans antialiased flex flex-col">
-    <NavBar session={session} />
-    <main className="flex-1 max-w-7xl w-full mx-auto">
-      {children}
-    </main>
-  </div>
+    <MobileSideBar session={session} />
+    <div className="w-full min-h-screen bg-background font-sans antialiased flex flex-col">
+      <NavBar session={session} />
+      <main className="flex-1 max-w-7xl w-full mx-auto">
+        {children}
+      </main>
+    </div>
   </SidebarProvider>
 );
 
 function App() {
-  const[session,setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
 
   const wakeServer = () => {
     console.log("Spinning up Render");
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-    axios.get(`${apiUrl}/api/health`).then(res=> console.log("FastApi/Express Up")).catch(err => console.log("Ping failed",err.message));
+    axios.get(`${apiUrl}/api/health`).then(()=> console.log("FastApi/Express Up")).catch(err => console.log("Ping failed", err.message));
   }
 
-  useEffect(()=> {
+  useEffect(() => {
 
     //check for active session
-    supabase.auth.getSession().then(({ data:{session}}) =>{
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      if(session){
+      if (session) {
         wakeServer();
       }
     });
 
     //listen for changes
-    const { data: {subscription}} = supabase.auth.onAuthStateChange((_event, session) =>{
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-      if( _event == 'SIGNED_IN' && session){
+      if (_event == 'SIGNED_IN' && session) {
         wakeServer();
       }
     });
 
-    
+
 
     return () => subscription.unsubscribe();
 
@@ -85,7 +84,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />}/>
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/predict/:lakeName" element={<LakePrediction />} />
         </Routes>
       </Layout>
