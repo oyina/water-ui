@@ -124,9 +124,9 @@ export function SignupForm({
                 <Button type="submit" disabled={loading}>
                    {loading ? "Creating User..." : "Create Account" }
                 </Button>
-                <Button variant="outline" type="button">
+                {/* <Button variant="outline" type="button">
                   Sign up with Google
-                </Button>
+                </Button> */}
                 <FieldDescription className="px-6 text-center">
                   Already have an account? <Link to="/login">Login</Link>
                 </FieldDescription>
