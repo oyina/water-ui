@@ -59,7 +59,7 @@ export default function SignUp() {
         onSubmit={handleSignup}
         loading={loading}
         error={error || ""} 
-        success={success}
+        success={success || ""}
         />
       </div>
     </div>
