@@ -251,7 +251,7 @@ export default function LakePrediction(){
                         <CardTitle className="font-semibold">Hydrological Feaures</CardTitle>
                         <CardDescription>Enter parameters and run the forecast to see results. Type in  place holder values to test model.</CardDescription>
                         <CardContent className="px-0">
-                            <form onSubmit={session ? handlePredict : null} className="space-y-6">
+                            <form onSubmit={handlePredict} className="space-y-6">
                                 <div className="space-y-4 p-4 border rounded-lg bg-slate-50/50">
                                     <h3 className="font-semibold flex items-center gap-2">
                                          Lake Features

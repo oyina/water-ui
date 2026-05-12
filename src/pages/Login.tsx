@@ -10,7 +10,7 @@ export default function Login() {
     const [loading,setLoading] = useState(false);
     const [error,setError] = useState<string | null>(null);
 
-    const handleLogin = async (e: React.SubmitEvent) => {
+    const handleLogin = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
@@ -38,7 +38,7 @@ export default function Login() {
         setPassword={setPassword}
         onSubmit={handleLogin}
         loading={loading}
-        error={error}
+        error={error || ""}
         />
       </div>
     </div>

@@ -13,7 +13,7 @@ export default function SignUp() {
     const [error,setError] = useState<string | null>(null);
     const [success,setSuccess] = useState<string | null>(null);
 
-    const handleSignup = async (e: React.SubmitEvent) => {
+    const handleSignup = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
         setError(null);
 
@@ -58,7 +58,7 @@ export default function SignUp() {
         setConfirmPassword={setConfirmPassword}
         onSubmit={handleSignup}
         loading={loading}
-        error={error} 
+        error={error || ""} 
         success={success}
         />
       </div>
